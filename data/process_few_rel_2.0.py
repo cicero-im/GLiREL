@@ -1,10 +1,10 @@
 from datasets import load_dataset, concatenate_datasets
 import json
-import requests
+from security import safe_requests
 
 
 def download_dataset(url):
-    response = requests.get(url)
+    response = safe_requests.get(url)
     response.raise_for_status()  # Ensure we notice bad responses
     data = json.loads(response.content)
     return data
