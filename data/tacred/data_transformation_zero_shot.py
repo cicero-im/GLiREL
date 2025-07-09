@@ -1,7 +1,7 @@
-import random
 import json
 import math, os, argparse
 from collections import OrderedDict
+import secrets
 
 TACRED_NO_REL = "no_relation"
 
@@ -85,7 +85,7 @@ def main(args):
         # random spilt of relation
         if seed is not None:
             print("Random splits, with a fixed seed value:", seed)
-            random.seed(seed)
+            secrets.SystemRandom().seed(seed)
         else:
             print("Random splits, with a random seed.")
         split = build_splits_randomly(categories, train_categories_size,
@@ -121,10 +121,10 @@ def build_splits_from_json(predefined_split):
 
 def build_splits_randomly(categories, train_size, dev_size, test_size):
     possible_test_relation = categories
-    test_relations = random.sample(possible_test_relation, test_size)
+    test_relations = secrets.SystemRandom().sample(possible_test_relation, test_size)
     all_other_relations = [c for c in categories if c not in test_relations]
 
-    dev_relations = random.sample(all_other_relations, dev_size)
+    dev_relations = secrets.SystemRandom().sample(all_other_relations, dev_size)
     train_relations = [k for k in all_other_relations if k not in dev_relations]
 
     assert len(train_relations) == train_size, "Amount of train categories isn't what you specified. " \

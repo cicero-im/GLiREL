@@ -5,9 +5,9 @@ import torch
 from torch import nn
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
-import random
 from copy import copy, deepcopy
 from loguru import logger
+import secrets
 
 def insert_entity_markers(tokens, span_idx, relations, entity_start_token, entity_end_token):
     """
@@ -273,7 +273,7 @@ class InstructBase(nn.Module):
             negs = self.get_negatives_rel(train_relation_types, 100)
             for b in batch_list:
                 # negs = b["negative"]
-                random.shuffle(negs)
+                secrets.SystemRandom().shuffle(negs)
 
 
                 positive_types = list(set([el['relation_text'] for el in b['relations']]))
@@ -288,11 +288,11 @@ class InstructBase(nn.Module):
 
                 # shuffle (every epoch)
                 if getattr(self.base_config, "shuffle_types", True):
-                    random.shuffle(types)
+                    secrets.SystemRandom().shuffle(types)
 
                 # random drop
                 if len(types) != 0 and self.base_config.random_drop:
-                    num_rels = random.randint(1, len(types))
+                    num_rels = secrets.SystemRandom().randint(1, len(types))
                     types = types[ :num_rels]
 
                 types = types[ : self.base_config.num_train_rel_types]
@@ -382,13 +382,13 @@ class InstructBase(nn.Module):
             ent_types.extend(list(types))
         ent_types = list(set(ent_types))
         # sample negatives
-        random.shuffle(ent_types)
+        secrets.SystemRandom().shuffle(ent_types)
         return ent_types[:sampled_neg]
     
     @staticmethod
     def get_negatives_rel(train_relation_types, sampled_neg=100):
         # sample negatives
-        random.shuffle(train_relation_types)
+        secrets.SystemRandom().shuffle(train_relation_types)
         return train_relation_types[:sampled_neg]
 
     def create_dataloader(self, data, relation_types=None, train_relation_types=None, **kwargs):

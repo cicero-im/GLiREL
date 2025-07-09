@@ -18,7 +18,6 @@ from glirel.model import load_config_as_namespace
 from datetime import datetime
 import json
 import logging
-import random
 import shutil
 import wandb
 from functools import partial
@@ -26,6 +25,8 @@ from sklearn.model_selection import train_test_split
 import time
 import gc
 import sys
+import secrets
+
 sys.path.append('data/re-docred')
 from run_evaluation import run_evaluation
 from redocred_experiment_params import REDOCRED_EXP_SWEEP_CONFIG
@@ -142,10 +143,10 @@ def split_data_by_relation_type(data, num_unseen_rel_types, seed=None):
     start = time.time()
     count = 0
     if seed is None:
-        seed = random.randint(0, 1000)
+        seed = secrets.SystemRandom().randint(0, 1000)
     while correct_num_unseen_relations_achieved is False:
-        random.seed(seed)
-        random.shuffle(unique_relations)
+        secrets.SystemRandom().seed(seed)
+        secrets.SystemRandom().shuffle(unique_relations)
         test_relation_types = set(unique_relations[ : num_unseen_rel_types ])
         train_relation_types = set(unique_relations[ num_unseen_rel_types : ])
         
@@ -171,7 +172,7 @@ def split_data_by_relation_type(data, num_unseen_rel_types, seed=None):
             # bump the number of unseen relations by 1 to cast a wider net
             # if the bump gets too big, reset it
             num_unseen_rel_types = num_unseen_rel_types + 1 if (num_unseen_rel_types <  original_num_unseen_rel_types*2) else num_unseen_rel_types
-            seed = random.randint(0, 1000)
+            seed = secrets.SystemRandom().randint(0, 1000)
 
         count += 1
         if count % 50 == 0:
@@ -199,9 +200,9 @@ def dirty_split_data_by_relation_type(data, num_unseen_rel_types, max_test_size)
 
 
     while not correct_num_unseen_relations_achieved:
-        seed = random.randint(0, 1000)
-        random.seed(seed)
-        random.shuffle(unique_relations)
+        seed = secrets.SystemRandom().randint(0, 1000)
+        secrets.SystemRandom().seed(seed)
+        secrets.SystemRandom().shuffle(unique_relations)
         test_relation_types = set(unique_relations[ : num_unseen_rel_types ])
         
         train_data = []

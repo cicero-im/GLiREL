@@ -5,7 +5,7 @@ import os
 
 import torch
 from tqdm import tqdm
-import random
+import secrets
 
 
 def open_content(path):
@@ -181,7 +181,7 @@ def sample_train_data(data_paths, sample_size=10000):
         for i in range(len(train)):
             train[i]["label"] = labels
 
-        random.shuffle(train)
+        secrets.SystemRandom().shuffle(train)
         train = train[:sample_size]
         new_train.extend(train)
 

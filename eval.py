@@ -12,13 +12,13 @@ from glirel.model import load_config_as_namespace
 from datetime import datetime
 import json
 import logging
-import random
 import shutil
 import wandb
 from functools import partial
 from sklearn.model_selection import train_test_split
 import time
 import gc
+import secrets
 
 
 logger = logging.getLogger(__name__)
@@ -80,9 +80,9 @@ def split_data_by_relation_type(data, num_unseen_rel_types):
     start = time.time()
     count = 0
     while not correct_num_unseen_relations_achieved:
-        seed = random.randint(0, 1000)
-        random.seed(seed)
-        random.shuffle(unique_relations)
+        seed = secrets.SystemRandom().randint(0, 1000)
+        secrets.SystemRandom().seed(seed)
+        secrets.SystemRandom().shuffle(unique_relations)
         test_relation_types = set(unique_relations[ : num_unseen_rel_types ])
         train_relation_types = set(unique_relations[ num_unseen_rel_types : ])
         
@@ -136,9 +136,9 @@ def dirty_split_data_by_relation_type(data, num_unseen_rel_types, max_test_size)
 
 
     while not correct_num_unseen_relations_achieved:
-        seed = random.randint(0, 1000)
-        random.seed(seed)
-        random.shuffle(unique_relations)
+        seed = secrets.SystemRandom().randint(0, 1000)
+        secrets.SystemRandom().seed(seed)
+        secrets.SystemRandom().shuffle(unique_relations)
         test_relation_types = set(unique_relations[ : num_unseen_rel_types ])
         
         train_data = []

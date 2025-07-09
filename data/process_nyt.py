@@ -4,9 +4,10 @@
 
 
 import json
-import random
 import os
-random.seed(12)
+import secrets
+
+secrets.SystemRandom().seed(12)
 import zipfile
 
 from tqdm import tqdm

@@ -1,7 +1,7 @@
 from datasets import load_dataset
 import json, statistics
 from tqdm import tqdm
-from random import randint
+import secrets
 
 '''
 
@@ -241,7 +241,7 @@ for SPLIT in ['train', 'dev', 'test']: # train_distant
 
     # for ent in data[0]['ner']: print(f"{ent} => {data[0]['tokenized_text'][ent[0]:ent[1]]}")  # ner_sf => tokenized_text_sf
         
-    random_i = randint(0, len(data))
+    random_i = secrets.SystemRandom().randint(0, len(data))
     for rel in data[random_i]['relations']: print(f"{rel['head']['name']} {rel['head']['position']} -> {rel['relation_text']} -> {rel['tail']['name']} {rel['tail']['position']}")
         
     print(f"Number of documents: {len(data)}")

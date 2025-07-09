@@ -1,7 +1,8 @@
 import json
-import random
 import os
-random.seed(12)
+import secrets
+
+secrets.SystemRandom().seed(12)
 
 from tqdm import tqdm
 import gdown
@@ -282,7 +283,7 @@ transformed_data = transform_wiki_zsl(data)
 
 # shuffle
 # random.seed(12)
-random.shuffle(transformed_data)
+secrets.SystemRandom().shuffle(transformed_data)
 
 # count up relation types
 relationship_counts = {}
